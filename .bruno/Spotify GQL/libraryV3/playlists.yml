@@ -1,18 +1,3 @@
-# Copyright (C) 2026 Sonic Liberation
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 info:
   name: playlists
   type: http
@@ -52,7 +37,7 @@ http:
         "extensions": {
           "persistedQuery": {
             "version": 1,
-            "sha256Hash": "973e511ca44261fda7eebac8b653155e7caee3675abb4fb110cc1b8c78b091c3"
+            "sha256Hash": "390c78e5b951029bad359785e69b07b536a509c581cbcd0aded5e5067f187455"
           }
         }
       }
