@@ -28,16 +28,19 @@ identifies a plugin by name *and* author — disable or remove the other one.
 
 This began as a fork of
 [sonic-liberation/spotube-plugin-spotify](https://github.com/sonic-liberation/spotube-plugin-spotify),
-whose `main` has since been rewritten in Kotlin/JS. This repository's
-`feat/spotify-gql-overview-coalescing` branch (and the `0.2.x` tags) is the Hetu
-implementation, which is what Spotube's plugin API 2.0.0 runs today. Its
-dependency is [Adamyabhatt01/spotify-gql-client](https://github.com/Adamyabhatt01/spotify-gql-client),
-branch `inline-library-hydration`.
+whose `main` has since been rewritten in Kotlin/JS. That rewrite is not part of
+this repository's mainline: `main` here is the Hetu implementation (the `0.2.x`
+tags), which is what Spotube's plugin API 2.0.0 runs today. The upstream Kotlin
+tree stays reachable as the second parent of the merge that established this
+mainline, so nothing was rebased away.
+
+Its dependency is [Adamyabhatt01/spotify-gql-client](https://github.com/Adamyabhatt01/spotify-gql-client),
+pinned here by gitlink; that repository's `main` is the same Dart/Hetu line.
 
 ## Build from source
 
 ```bash
-git clone --recurse-submodules -b feat/spotify-gql-overview-coalescing \
+git clone --recurse-submodules \
   https://github.com/Adamyabhatt01/spotube-plugin-spotify.git
 cd spotube-plugin-spotify
 dart pub global activate hetu_script_dev_tools
