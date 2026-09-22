@@ -1,11 +1,11 @@
 {
-  "version": "0.2.3-inline",
+  "version": "0.2.4",
   "name": "Spotify",
-  "author": "Sonic Liberation",
-  "description": "Spotube plugin for Spotify metadata",
+  "author": "Adamya Bhatt",
+  "description": "Spotube plugin for Spotify metadata (Hetu implementation)",
   "entryPoint": "SpotifyMetadataProviderPlugin",
   "apis": ["webview", "localstorage", "timezone"],
   "abilities": ["authentication", "metadata"],
-  "repository": "https://github.com/sonic-liberation/spotube-plugin-spotify",
+  "repository": "https://github.com/Adamyabhatt01/spotube-plugin-spotify",
   "pluginApiVersion": "2.0.0"
 }
