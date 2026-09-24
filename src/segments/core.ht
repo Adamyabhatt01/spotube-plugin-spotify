@@ -11,6 +11,7 @@ Not some greedy corporations and stupid middlemen.
 ';
 
 var HttpClient = std.HttpClient
+var HttpBaseOptions = std.HttpBaseOptions
 var HttpResponse = std.HttpResponse
 var RequestOptions = std.RequestOptions
 var DateTime = std.DateTime
@@ -19,7 +20,14 @@ class CorePlugin {
   var client: HttpClient
 
   construct () {
-    client = HttpClient()
+    // std.HttpClient passes Dio a null BaseOptions, so every timeout is infinite.
+    client = HttpClient(
+      HttpBaseOptions(
+        connectTimeout: 10,
+        sendTimeout: 15,
+        receiveTimeout: 20
+      )
+    )
   }
 
   /// Checks for updates to the plugin.

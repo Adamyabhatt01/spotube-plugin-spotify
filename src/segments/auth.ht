@@ -8,6 +8,7 @@ var StreamSubscription = std.StreamSubscription
 var DateTime = std.DateTime
 var Duration = std.Duration
 var HttpClient = std.HttpClient
+var HttpBaseOptions = std.HttpBaseOptions
 var HttpResponse = std.HttpResponse
 var RequestOptions = std.RequestOptions
 var Timer = std.Timer
@@ -31,7 +32,14 @@ class SpotifyAuthEndpoint {
 
   construct (onEvent: (data) -> void){
     controller = StreamController.broadcast()
-    client = HttpClient()
+    // std.HttpClient passes Dio a null BaseOptions, so every timeout is infinite.
+    client = HttpClient(
+      HttpBaseOptions(
+        connectTimeout: 10,
+        sendTimeout: 15,
+        receiveTimeout: 20
+      )
+    )
 
     controller.stream.listen((event) {
       if(onEvent != null) {
