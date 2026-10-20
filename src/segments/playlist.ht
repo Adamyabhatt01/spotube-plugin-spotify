@@ -56,7 +56,19 @@ class PlaylistEndpoint {
       description: description,
       public: public,
       collaborative: collaborative
-    )
+    ).then((_) {
+      if (public != null) {
+        // Visibility is a rootlist-item attribute on the web-player path,
+        // not part of the playlist attributes delta.
+        return client.user.me().then((user) {
+          return client.playlist.changePermission(
+            user["id"],
+            "spotify:playlist:${playlistId}",
+            public,
+          )
+        })
+      }
+    })
   }
 
   fun deletePlaylist(playlistId: string) {
