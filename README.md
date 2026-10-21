@@ -2,7 +2,13 @@
 
 Spotify metadata plugin for [Spotube](https://github.com/KRTirtho/spotube),
 written in [Hetu](https://github.com/hetu-community/hetu). Maintained by
-**Adamya Bhatt**; version `0.2.9`, plugin API `2.0.0`.
+**Adamya Bhatt**; version `0.2.10`, plugin API `2.0.0`.
+
+`0.2.10` fixes `removeTracks`, which asserted on `tracks` — an identifier it
+never receives — so removing a song from a playlist failed before the request
+was built. Its update check now points at this repository instead of the
+upstream one, which would have offered to replace this plugin with the old
+author's build.
 
 Provides authenticated Spotify metadata: library, liked tracks, playlists,
 artist/album pages, search and scrobbling-capable endpoints. Audio streaming
@@ -13,7 +19,7 @@ itself comes from a separate audio-source plugin.
 Spotube → Settings → Plugins → paste this URL → Install:
 
 ```
-https://raw.githubusercontent.com/Adamyabhatt01/spotube-plugin-spotify/0.2.9/dist/plugin.smplug
+https://raw.githubusercontent.com/Adamyabhatt01/spotube-plugin-spotify/0.2.10/dist/plugin.smplug
 ```
 
 Then open the installed entry and sign in to Spotify. Requires a Spotube build
