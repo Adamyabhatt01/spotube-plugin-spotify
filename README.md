@@ -54,7 +54,10 @@ hetu compile src/plugin.ht build/plugin.out
 ```
 
 Then zip `plugin.json`, `build/plugin.out` and `assets/logo.png` into
-`plugin.smplug` (`make archive` does this, and needs `zip`).
+`plugin.smplug` (`make archive` does this, and needs `zip`). It lands at
+`build/plugin.smplug`; publishing means copying it to `dist/plugin.smplug`, which is
+the path the install URL above serves, and Spotube bundles a copy of the same file
+at `assets/plugins/spotube-plugin-spotify/plugin.smplug`.
 
 Both submodules resolve over https, so `--recurse-submodules` needs no SSH key.
 `plugin.out` embeds its build timestamp, so two compiles of identical sources
