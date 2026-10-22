@@ -28,6 +28,15 @@ class SpotifyAuthEndpoint {
   var credentials: Map
   var client: HttpClient
 
+  /// Whether the stored credentials have been read yet.
+  ///
+  /// Until they are, `isAuthenticated()` answers false — and that is not the
+  /// same as "signed out", it is "not known yet". The caller has to be able
+  /// to tell the two apart: publishing "signed out" and correcting it a
+  /// moment later makes every watcher of the answer rebuild, and a rebuild
+  /// of the saved lists re-reads the whole library for nothing.
+  var _loaded = false
+
   get authStateStream -> Stream => controller.stream
 
   construct (onEvent: (data) -> void){
@@ -83,6 +92,9 @@ class SpotifyAuthEndpoint {
 
   fun initializeFromLocalStorage() {
 		LocalStorage.getString("credentials").then((credentialsStr){
+      // The stored credentials have been read. There may be none — that is
+      // a signed-out account, not an unknown one.
+      _loaded = true
       if (credentialsStr != null) {
         credentials = JSON.decode(credentialsStr);
         if (isExpired()) {
@@ -93,6 +105,14 @@ class SpotifyAuthEndpoint {
       }
     })
 	}
+
+  /// Whether the stored credentials have been read yet.
+  ///
+  /// False means "not known yet" — the answer about the session is still
+  /// coming — and not "signed out".
+  fun isLoaded() -> bool {
+    return _loaded
+  }
 
   fun getLatestNuance() -> Future { // Future<{v: int, s: string}>
     return client.get_req(
@@ -196,6 +216,7 @@ class SpotifyAuthEndpoint {
 		return this.credentialsFromCookie(cookies).then((creds){
       LocalStorage.setString("credentials", JSON.encode(creds.toJson()));
       credentials = creds;
+      _loaded = true;
 
       controller.add({type: "login"}.toJson());
     })
@@ -211,9 +232,25 @@ class SpotifyAuthEndpoint {
 		return this.credentialsFromCookie(credentials["cookies"]).then((creds){
       LocalStorage.setString("credentials", JSON.encode(creds.toJson()));
       credentials = creds;
+      _loaded = true;
       controller.add({ type: "refreshed" }.toJson())
     })
 	}
+
+  // Re-mint the access token from the stored cookies, on demand.
+  //
+  // The refresh timer only fires at the token's *stated* expiry. Spotify
+  // rejects an access token before that — it invalidates them on some
+  // events — and then every request answers 401 while the stored
+  // credentials still look valid. Restarting does not help either: the
+  // stored expiry has not passed, so the startup path recovers them as-is.
+  //
+  // The caller uses this after a 401: the cookies may well still be good,
+  // and a fresh token from them is a far better answer than asking the user
+  // to sign in again.
+  fun refresh() -> Future {
+    return this.refreshCredentials()
+  }
 
   fun authenticate() -> Future {
     var webview = Webview(uri: "https://accounts.spotify.com/")
@@ -235,6 +272,7 @@ class SpotifyAuthEndpoint {
 
 	fun logout() {
 		credentials = null;
+		_loaded = true;
 		LocalStorage.remove("credentials");
 		controller.add({type: "logout"}.toJson());
 	}
